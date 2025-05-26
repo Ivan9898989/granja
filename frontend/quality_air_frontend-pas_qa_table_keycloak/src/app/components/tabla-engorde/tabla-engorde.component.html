@@ -1,0 +1,128 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                        <button pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="engordes" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['nombre','fecha_compra','fecha_salida','progreso']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedUsers" selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Engorde</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_compra">Fecha de compra <p-sortIcon field="fecha_compra"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_salida">Fecha de salida <p-sortIcon field="fecha_salida"></p-sortIcon></th>
+                        
+                        <th style="min-width: 12rem">
+                            <div class="flex justify-between items-center">
+                                Avance
+                                <p-columnFilter field="progreso" matchMode="between" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                                    <ng-template #filter let-filter="filterCallback">
+                                        <p-slider [ngModel]="activityValues" [range]="true" (onSlideEnd)="filter($event.values)" styleClass="m-3" [style]="{ 'min-width': '12rem' }"></p-slider>
+                                        <div class="flex items-center justify-between px-2">
+                                            <span>{{ activityValues[0] }}</span>
+                                            <span>{{ activityValues[1] }}</span>
+                                        </div>
+                                    </ng-template>
+                                </p-columnFilter>
+                            </div>
+                        </th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-engorde>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="engorde"></p-tableCheckbox>
+                        </td>
+   
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">nombre</span>
+                            {{engorde.nombre}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">fecha_compra</span>
+                            {{engorde.fecha_compra}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">fecha_salida</span>
+                            {{engorde.fecha_salida}}
+                        </td>
+                        <td>
+                            <p-progressBar [value]="engorde.progreso" [showValue]="false" [style]="{ height: '0.5rem', backgroundColor:'#4caf50' }"/>
+                        </td>
+                        <td>
+                            <div class="flex flex-wrap gap-2">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editUser(engorde)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteUser(engorde)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="userDialog" [style]="{width: '450px'}" header="Datos" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="field">
+                    <label for="name">Nombre</label>
+                    <input type="text" pInputText id="name" [(ngModel)]="engorde.nombre" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !engorde.nombre}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !engorde.nombre">Nombre es requerido.</small>
+                </div>
+                <div class="field">
+                    <label for="date">Fecha de inseminacion</label>
+                    <input type="Date" pInputText id="dateInseminacion" [(ngModel)]="engorde.fecha_compra" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !engorde.fecha_compra}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !engorde.fecha_compra">La fecha de compra es requerida</small>
+                </div>                
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteUserDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="engorde">Estas seguro de eliminar el usuario <b>{{engorde.nombre}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteUserDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Si" (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteUsersDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Estas seguro de eliminar los usuarios seleccionados?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteUsersDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Si" (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

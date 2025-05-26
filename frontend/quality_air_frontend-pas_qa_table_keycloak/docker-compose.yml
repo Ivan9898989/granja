@@ -1,0 +1,27 @@
+
+services:
+  
+#  ///   docker build -t quality_air_frontend:latest .
+  air-quality-front:
+    image: quality_air_frontend
+    container_name: quality_air_frontend2
+    ports:
+      - "8081:80"
+
+  keycloak:
+    container_name: keycloak_quality
+    image: quay.io/keycloak/keycloak:25.0.1
+    ports:
+      - "443:8080"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    restart: always
+    volumes:
+      - ./keycloak_init.json:/opt/keycloak/data/import/keycloak_init.json
+    command: ["start-dev", "--import-realm"]
+
+
+volumes:
+  dbdata: 
+    driver: local

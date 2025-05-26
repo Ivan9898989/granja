@@ -1,0 +1,28 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <img src="assets/layout/images/{{layoutService.config().colorScheme === 'light' ? 'logo-dark' : 'logo-white'}}.svg" alt="logo">
+        <span>Quality-Air</span>
+    </a>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()">
+        <i class="pi pi-bars"></i>
+    </button>
+
+    <button #topbarmenubutton class="p-link layout-topbar-menu-button layout-topbar-button" (click)="layoutService.showProfileSidebar()">
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+        <p style="margin-top: revert;">{{userIdentifier}}</p>
+        <p-confirmDialog header="Confirmación" key="confirm1" icon="pi pi-exclamation-triangle" message="Está seguro de Cerrar Sesión?"
+                             [style]="{width: '350px'}" acceptButtonStyleClass="p-button-text" acceptLabel="Si" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+            <div class="grid">
+                <div class="col-12">
+                    <button class="p-link layout-topbar-button" (click)="confirm1()">
+                        <i class="pi pi-sign-out"></i>
+                        <span>LogOut</span>
+                    </button>
+                </div>
+            </div>
+    </div>
+</div>
