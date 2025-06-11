@@ -1,4 +1,4 @@
-export class Lechon {
+export class HistorialLechon {
     id!: number | null ;
     nombre!: string;
     cantidad_machos!: number | null;

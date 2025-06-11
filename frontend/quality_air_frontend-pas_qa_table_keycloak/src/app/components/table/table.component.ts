@@ -3,6 +3,7 @@ import { UserService } from '../../services/user.service';
 import { Cerda } from '../../models/cerda';
 import { MessageService } from 'primeng/api';  
 import { Table } from 'primeng/table';
+import { CerdasService } from 'src/app/services/historial-cerdas.service'; // Asegúrate de que este servicio esté correctamente importado
 
 @Component({
   selector: 'app-table',
@@ -17,12 +18,24 @@ export class TableComponent implements OnInit {
   deleteUsersDialog:  boolean = false;
   activityValues: number[] = [0, 100];
   cerdas: Cerda[] = [];
+  berracos = [
+  { label: 'Duroc', value: 'Duroc' },
+  { label: 'Belga', value: 'Belga' },
+  { label: 'York', value: 'York' },
+  { label: 'Pietrain', value: 'Pietrain' },
+  { label: 'Landra', value: 'Landra' },
+  { label: 'Pancho', value: 'Pancho' },
+  { label: 'Hercules', value: 'Hercules' }
+  ];
+
   cerda: Cerda={
     id: null,
     nombre: '',
     fecha_inseminacion: null,
+    berraco: '',
     fecha_parto: null,
-    progreso: null
+    progreso: null,
+    dias_transcurridos: null
   };
   confirmPassword: string='';
   selectedUsers: Cerda[]=[];
@@ -33,7 +46,27 @@ export class TableComponent implements OnInit {
   loading: boolean = false;
  
 
-  constructor(private userService: UserService, private messageService: MessageService ){}
+  constructor(
+    private userService: UserService, 
+    private messageService: MessageService,
+    private cerdasService: CerdasService 
+   ){}
+
+  mover(id: number): void {
+    if (typeof id === 'number') {
+      this.cerdasService.moverLechonAlHistorial(id).subscribe({
+        next: () => {
+          console.log('Lechón movido al historial');
+          this.loadUsers();
+        },
+        error: (err) => {
+          console.error('Error al mover lechón:', err);
+        }
+      });
+    } else {
+      console.warn('Debe proporcionar un ID válido. ID actual:', id);
+    }
+  }
 
   ngOnInit() {
     this.loadUsers();
@@ -52,6 +85,7 @@ export class TableComponent implements OnInit {
       next: (data) => {
         console.log(data); 
         this.cerdas = data; 
+        this.cerdas.forEach(cerda => this.verificarEstadoCerda(cerda)); 
         this.loading = false;
       },
       error: (err) => {
@@ -66,8 +100,11 @@ export class TableComponent implements OnInit {
       id: null,
       nombre: '',
       fecha_inseminacion: null,
+      berraco: '',
       fecha_parto: null,
       progreso: null,
+      dias_transcurridos: null
+
     };
     this.submitted = false;
     this.userDialog = true;
@@ -140,12 +177,12 @@ export class TableComponent implements OnInit {
         
         
         // Muestra un mensaje de éxito
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User deactivated successfully', life: 3000 });
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Registro de la cerda eliminada', life: 3000 });
         this.loadUsers();
       },
       error: (err) => {
         console.error('Error al desactivar usuario', err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to deactivate user', life: 3000 });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al eliminar a la cerda', life: 3000 });
       }
     });
   }
@@ -155,8 +192,10 @@ export class TableComponent implements OnInit {
     id: null,
     nombre: '',
     fecha_inseminacion: null,
+    berraco: '',
     fecha_parto: null,
-    progreso: null
+    progreso: null,
+    dias_transcurridos: null
   };
 }
 
@@ -165,6 +204,23 @@ export class TableComponent implements OnInit {
   hideDialog() {
     this.userDialog = false;
     this.submitted = false;
+  }
+
+  verificarEstadoCerda(cerda: Cerda) {
+    if (cerda.dias_transcurridos === 21) {
+      const confirmacion = confirm(`¿La cerda ${cerda.nombre} quedó embarazada?`);
+      if (!confirmacion) {
+        this.eliminarRegistro(cerda);
+      }
+    }
+  }
+
+  eliminarRegistro(cerda: Cerda) {
+    this.cerdas = this.cerdas.filter(c => c.id !== cerda.id);
+    this.userService.deleteCerda(cerda).subscribe({
+      next: () => this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: `Registro de ${cerda.nombre} eliminado`, life: 3000 }),
+      error: (err) => console.error('Error al eliminar la cerda', err)
+    });
   }
 
   saveUser() {
@@ -182,24 +238,24 @@ export class TableComponent implements OnInit {
                 this.cerdas[index] = updatedUser;
               }
             }
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Updated', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Datos de la cerda actualizada', life: 3000 });
             this.loadUsers();
           },
           error: (err) => {
-            console.error('Error al actualizar usuario', err);
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update user', life: 3000 });
+            console.error('Error al actualizar cerda', err);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar la cerda', life: 3000 });
           }
         });
       } else {
         this.userService.addUser(this.cerda).subscribe({
           next: (newUser) => {
             this.cerdas.push(newUser);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Created', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Cerda Creada', life: 3000 });
             this.loadUsers();
           },
           error: (err) => {
-            console.error('Error al crear usuario', err);
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to create user', life: 3000 });
+            console.error('Error al ingresar la cerda', err);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al registrar la cerda', life: 3000 });
           }
         });
       }
@@ -210,8 +266,10 @@ export class TableComponent implements OnInit {
         id: null,
         nombre: '',
         fecha_inseminacion: null,
+        berraco: '',
         fecha_parto: null,
-        progreso: null
+        progreso: null,
+        dias_transcurridos: null
       };
     }
   }
@@ -228,10 +286,6 @@ export class TableComponent implements OnInit {
       }
     }
     return index;
-  }
-
-  createId(): number {
-    return Math.floor(Math.random() * 100000); // Generates a random number as ID
   }
 
   onGlobalFilter(table: Table, event: Event) {

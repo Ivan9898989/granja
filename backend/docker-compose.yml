@@ -1,8 +1,10 @@
 version: '3.8'
 
 services:
+#  ///   docker build -t backend-app:latest .
   app:
-    build: .
+    image: backend-app
+    container_name: backend_app
     ports:
       - "3000:3000"
     environment:

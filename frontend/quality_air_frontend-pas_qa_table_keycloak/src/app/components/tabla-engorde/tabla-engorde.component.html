@@ -32,6 +32,7 @@
                         </th>
                         <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
                         <th pSortableColumn="fecha_compra">Fecha de compra <p-sortIcon field="fecha_compra"></p-sortIcon></th>
+                        <th pSortableColumn="fecha_vitamina">Fecha de vitamina <p-sortIcon field="fecha_vitamina"></p-sortIcon></th>                        
                         <th pSortableColumn="fecha_salida">Fecha de salida <p-sortIcon field="fecha_salida"></p-sortIcon></th>
                         
                         <th style="min-width: 12rem">
@@ -66,16 +67,20 @@
                             {{engorde.fecha_compra}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">fecha_vitamina </span>
+                            {{engorde.fecha_vitamina}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">fecha_salida</span>
                             {{engorde.fecha_salida}}
                         </td>
                         <td>
-                            <p-progressBar [value]="engorde.progreso" [showValue]="false" [style]="{ height: '0.5rem', backgroundColor:'#4caf50' }"/>
+                            <p-progressBar [value]="engorde.progreso" [showValue]="false" [style]="{ height: '0.5rem' }"/>
                         </td>
                         <td>
                             <div class="flex flex-wrap gap-2">
                                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editUser(engorde)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteUser(engorde)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="mover(engorde.id)"></button>
                             </div>
                         </td>
                     </tr>

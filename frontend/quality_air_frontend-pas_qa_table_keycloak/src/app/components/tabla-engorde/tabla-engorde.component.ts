@@ -3,6 +3,7 @@ import { UserService } from '../../services/engorde.service';
 import { Engorde } from '../../models/engorde';
 import { MessageService } from 'primeng/api'; 
 import { Table } from 'primeng/table';
+import { EngordeService } from 'src/app/services/historial-engorde.service';
 
 @Component({
   selector: 'app-tabla-engorde',
@@ -21,6 +22,7 @@ export class TablaEngordeComponent implements OnInit {
     id: null,
     nombre: '',
     fecha_compra: null,
+    fecha_vitamina:null,
     fecha_salida: null,
     progreso: null
   };
@@ -33,8 +35,25 @@ export class TablaEngordeComponent implements OnInit {
   loading: boolean = false;
  
 
-  constructor(private userService: UserService, private messageService: MessageService ){}
+  constructor(private userService: UserService, private engordeService: EngordeService ,private messageService: MessageService ){}
 
+  mover(id: number): void {
+    if (typeof id === 'number') {
+      this.engordeService.moverLechonAlHistorial(id).subscribe({
+        next: () => {
+          console.log('Lechón movido al historial');
+          this.loadUsers();
+        },
+        error: (err) => {
+          console.error('Error al mover lechón:', err);
+        }
+      });
+    } else {
+      console.warn('Debe proporcionar un ID válido. ID actual:', id);
+    }
+  }
+
+  
   ngOnInit(): void {
     this.loadUsers();
 
@@ -66,6 +85,7 @@ export class TablaEngordeComponent implements OnInit {
       id: null,
       nombre: '',
       fecha_compra: null,
+      fecha_vitamina:null,
       fecha_salida: null,
       progreso: null
     };
@@ -155,6 +175,7 @@ export class TablaEngordeComponent implements OnInit {
     id: null,
     nombre: '',
     fecha_compra: null,
+    fecha_vitamina:null,
     fecha_salida: null,
     progreso: null
   };
@@ -210,6 +231,7 @@ export class TablaEngordeComponent implements OnInit {
         id: null,
         nombre: '',
         fecha_compra: null,
+        fecha_vitamina: null,
         fecha_salida: null,
         progreso: null
       };
@@ -230,9 +252,9 @@ export class TablaEngordeComponent implements OnInit {
     return index;
   }
 
-  createId(): number {
-    return Math.floor(Math.random() * 100000); // Generates a random number as ID
-  }
+  
+  
+
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');

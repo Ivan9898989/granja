@@ -1,0 +1,23 @@
+<div class="container">
+  <h2>Historial de Lechones</h2>
+
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Fecha inseminacion</th>
+        <th>Fecha berraco</th>
+        <th>Fecha parto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cerda of historial">
+        <td>{{ cerda.nombre }}</td>
+        <td>{{ cerda.fecha_inseminacion }}</td>
+        <td>{{ cerda.berraco}}</td>
+        <td>{{ cerda.fecha_parto }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

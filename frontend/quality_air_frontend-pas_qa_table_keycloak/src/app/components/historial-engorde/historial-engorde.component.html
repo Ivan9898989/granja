@@ -1,0 +1,22 @@
+<div class="container">
+  <h2>Historial de Engordes</h2>
+
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Fecha Compra</th>
+        <th>Fecha Vitamina</th>
+        <th>Fecha Salida</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let engorde of historial">
+        <td>{{ engorde.nombre }}</td>
+        <td>{{ engorde.fecha_compra }}</td>
+        <td>{{ engorde.fecha_vitamina }}</td>
+        <td>{{ engorde.fecha_salida }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService as LechonService } from '../../services/lechones.service'; 
 import { Lechon } from '../../models/lechon';
 import { MessageService } from 'primeng/api'; 
+import { UserService }  from 'src/app/services/historial-lechones.service';
 import { Table } from 'primeng/table';
 
 @Component({
@@ -19,11 +20,17 @@ export class TablaLechonesComponent implements OnInit{
   lechon: Lechon={
     id: null,
     nombre: '',
+    cantidad_machos: null,
+    cantidad_hembras: null,
     fecha_nacimiento: null,
-    fecha_salida: null,
+    fecha_hierro: null,
+    fecha_primera_dosis_respisure: null,
+    fecha_castracion: null,
+    fecha_segunda_dosis_respisure:null,
     fecha_destete: null,
-    progreso_salida: null,
-    progreso_destete: null,
+    fecha_desparacito:null,
+    fecha_colera:null,
+    fecha_salida: null
   };
   confirmPassword: string='';
   selectedUsers: Lechon[]=[];
@@ -34,7 +41,25 @@ export class TablaLechonesComponent implements OnInit{
   loading: boolean = false;
  
 
-  constructor(private userService: LechonService, private messageService: MessageService ){}
+  constructor(private userService: LechonService,private userService2: UserService ,private messageService: MessageService ){}
+
+  mover(id: number): void {
+    if (typeof id === 'number') {
+      this.userService2.moverLechonAlHistorial(id).subscribe({
+        next: () => {
+          console.log('Lechón movido al historial');
+          this.loadUsers();
+        },
+        error: (err) => {
+          console.error('Error al mover lechón:', err);
+        }
+      });
+    } else {
+      console.warn('Debe proporcionar un ID válido. ID actual:', id);
+    }
+  }
+
+
 
   ngOnInit(): void {
     this.loadUsers();
@@ -42,8 +67,15 @@ export class TablaLechonesComponent implements OnInit{
     this.cols = [
       { field: 'nombre', header: 'Nombre' },
       { field: 'fecha_nacimiento', header: 'fecha_nacimiento' },
+      { field: 'fecha_hierro', header:'fecha_hierro'},
+      { field: 'fecha_primera_dosis_respisure', header:'fecha_primera_dosis_respisure'},
+      { field: 'fecha_castracion', header:'fecha_castracion'},
+      { field: 'fecha_segunda_dosis_respisure', header:'fecha_segunda_dosis_respisure'},
       { field: 'fecha_destete', header: 'fecha_destete' },
+      { field: 'fecha_desparacito', header:'fecha_desparacito'},
+      { field: 'fecha_colera', header:'fecha_colera'},
       { field: 'fecha_salida', header: 'fecha_salida' }
+
   ];
   }
   loadUsers() {
@@ -65,11 +97,17 @@ export class TablaLechonesComponent implements OnInit{
     this.lechon = {
       id: null,
       nombre: '',
+      cantidad_machos: null,
+      cantidad_hembras: null,
       fecha_nacimiento: null,
-      fecha_salida: null,
+      fecha_hierro: null,
+      fecha_primera_dosis_respisure: null,
+      fecha_castracion: null,
+      fecha_segunda_dosis_respisure:null,
       fecha_destete: null,
-      progreso_salida: null,
-      progreso_destete: null,
+      fecha_desparacito:null,
+      fecha_colera:null,
+      fecha_salida: null
     };
     this.submitted = false;
     this.userDialog = true;
@@ -121,6 +159,7 @@ export class TablaLechonesComponent implements OnInit{
       this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'No users selected', life: 3000 });
     }
   }
+
   
 
 
@@ -156,11 +195,17 @@ export class TablaLechonesComponent implements OnInit{
   this.lechon = {
     id: null,
     nombre: '',
+    cantidad_machos: null,
+    cantidad_hembras: null,
     fecha_nacimiento: null,
-    fecha_salida: null,
+    fecha_hierro: null,
+    fecha_primera_dosis_respisure: null,
+    fecha_castracion: null,
+    fecha_segunda_dosis_respisure:null,
     fecha_destete: null,
-    progreso_salida: null,
-    progreso_destete: null,
+    fecha_desparacito:null,
+    fecha_colera:null,
+    fecha_salida: null
   };
 }
 
@@ -213,11 +258,17 @@ export class TablaLechonesComponent implements OnInit{
       this.lechon = {
         id: null,
         nombre: '',
+        cantidad_machos: null,
+        cantidad_hembras: null,
         fecha_nacimiento: null,
-        fecha_salida: null,
+        fecha_hierro: null,
+        fecha_primera_dosis_respisure: null,
+        fecha_castracion: null,
+        fecha_segunda_dosis_respisure:null,
         fecha_destete: null,
-        progreso_salida: null,
-        progreso_destete: null,
+        fecha_desparacito:null,
+        fecha_colera:null,
+        fecha_salida: null
       };
     }
   }

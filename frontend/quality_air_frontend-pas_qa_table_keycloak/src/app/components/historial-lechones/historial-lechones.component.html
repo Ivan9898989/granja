@@ -1,0 +1,38 @@
+<div class="container">
+  <h2>Historial de Lechones</h2>
+
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Machos</th>
+        <th>Hembras</th>
+        <th>Nacimiento</th>
+        <th>Hierro</th>
+        <th>Castración</th>
+        <th>1ra Respisure</th>
+        <th>2da Respisure</th>
+        <th>Destete</th>
+        <th>Desparacitación</th>
+        <th>Cólera</th>
+        <th>Salida</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let lechon of historial">
+        <td>{{ lechon.nombre }}</td>
+        <td>{{ lechon.cantidad_machos }}</td>
+        <td>{{ lechon.cantidad_hembras }}</td>
+        <td>{{ lechon.fecha_nacimiento }}</td>
+        <td>{{ lechon.fecha_hierro }}</td>
+        <td>{{ lechon.fecha_castracion }}</td>
+        <td>{{ lechon.fecha_primera_dosis_respisure }}</td>
+        <td>{{ lechon.fecha_segunda_dosis_respisure }}</td>
+        <td>{{ lechon.fecha_destete }}</td>
+        <td>{{ lechon.fecha_desparacito }}</td>
+        <td>{{ lechon.fecha_colera }}</td>
+        <td>{{ lechon.fecha_salida }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

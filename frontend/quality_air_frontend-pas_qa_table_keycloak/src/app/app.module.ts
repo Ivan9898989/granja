@@ -22,6 +22,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ToolbarModule } from 'primeng/toolbar';
 import { RatingModule } from 'primeng/rating';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 
@@ -31,6 +32,9 @@ import { TableComponent } from './components/table/table.component';
 import keycloakConfig from './keycloak/keycloak.conf';
 import { TablaLechonesComponent } from './components/tabla-lechones/tabla-lechones.component';
 import { TablaEngordeComponent } from './components/tabla-engorde/tabla-engorde.component';
+import { HistorialCerdasComponent } from './components/historial-cerdas/historial-cerdas.component';
+import { HistorialLechonesComponent } from './components/historial-lechones/historial-lechones.component';
+import { HistorialEngordeComponent } from './components/historial-engorde/historial-engorde.component';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -50,7 +54,10 @@ function initializeKeycloak(keycloak: KeycloakService) {
     HomeComponent,
     TableComponent,
     TablaLechonesComponent,
-    TablaEngordeComponent
+    TablaEngordeComponent,
+    HistorialCerdasComponent,
+    HistorialLechonesComponent,
+    HistorialEngordeComponent
   ],
   imports: [
     BrowserModule,
@@ -58,6 +65,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     AppLayoutModule,
     ChartModule,
     ButtonModule,
+    DropdownModule,
     ProgressBarModule,
     CheckboxModule,
     InputTextModule,

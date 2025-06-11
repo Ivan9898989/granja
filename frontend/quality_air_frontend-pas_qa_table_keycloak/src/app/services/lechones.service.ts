@@ -10,6 +10,10 @@ export class UserService {
   private apiUrl = 'http://localhost:3000/lechones'
 
   constructor(private http: HttpClient) {  }
+
+  moverLechonAlHistorial(id: number): Observable<any> {
+    return this.http.post<any>(`http://localhost:3000/lechones/mover-historial/${id}`, {});
+  }
   
   getUsers(): Observable<Lechon[]> {
     return this.http.get<Lechon[]>(this.apiUrl);

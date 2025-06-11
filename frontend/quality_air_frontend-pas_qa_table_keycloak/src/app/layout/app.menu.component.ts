@@ -26,7 +26,16 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Engorde', icon: 'pi pi-fw pi-table', routerLink: ['/table-engorde'] },
                     { label: 'Lechones', icon: 'pi pi-fw pi-table', routerLink: ['/table-lechones'] },
                 ]
+            },
+            {
+                label: 'Historial',
+                items: [
+                    { label: 'Historial Reproductoras', icon: 'pi pi-fw pi-table', routerLink: ['/historial-cerdas'] },
+                    { label: 'Historial Engorde', icon: 'pi pi-fw pi-table', routerLink: ['/historial-engorde'] },
+                    { label: 'Historial Lechones', icon: 'pi pi-fw pi-table', routerLink: ['/historial-lechones'] },
+                ]
             }
+
         ];
     }
 }

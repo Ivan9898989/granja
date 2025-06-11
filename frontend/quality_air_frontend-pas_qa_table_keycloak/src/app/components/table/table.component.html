@@ -32,8 +32,12 @@
                         </th>
                         <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
                         <th pSortableColumn="fecha_inseminacion">Fecha de inseminacion <p-sortIcon field="fecha_inseminacion"></p-sortIcon></th>
+                        <th pSortableColumn="berraco">Berraco <p-sortIcon field="berraco"></p-sortIcon></th>
                         <th pSortableColumn="fecha_parto">Fecha de parto <p-sortIcon field="fecha_parto"></p-sortIcon></th>
+                        <th pSortableColumn="dias_transcurridos ">Dias Transcurridos <p-sortIcon field="dias_transcurridos "></p-sortIcon></th>
+
                         
+
                         <th style="min-width: 12rem">
                             <div class="flex justify-between items-center">
                                 Avance
@@ -66,8 +70,15 @@
                             {{cerda.fecha_inseminacion}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">berraco</span>
+                            {{cerda.berraco}}
+                        <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">fechaDeParto</span>
                             {{cerda.fecha_parto}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">diasTranscurridos</span>
+                            {{cerda.dias_transcurridos}}
                         </td>
                         <td>
                             <p-progressBar [value]="cerda.progreso" [showValue]="false" [style]="{ height: '0.5rem' }"/>
@@ -75,9 +86,10 @@
                         <td>
                             <div class="flex flex-wrap gap-2">
                                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editUser(cerda)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteUser(cerda)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="mover(cerda.id) "></button>
                             </div>
                         </td>
+                        <td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -94,7 +106,21 @@
                     <label for="date">Fecha de inseminacion</label>
                     <input type="Date" pInputText id="dateInseminacion" [(ngModel)]="cerda.fecha_inseminacion" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !cerda.fecha_inseminacion}"/>
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !cerda.fecha_inseminacion">La fecha de inseminacion es requerida</small>
-                </div>                
+                </div>   
+                <div class="field">
+                    <label for="berraco">Berraco</label>
+                    <p-dropdown 
+                        [options]="berracos" 
+                        [(ngModel)]="cerda.berraco" 
+                        placeholder="Seleccione un berraco"
+                        optionLabel="label"
+                        optionValue="value"
+                        id="berraco"
+                        [ngClass]="{'ng-invalid ng-dirty' : submitted && !cerda.berraco}">
+                    </p-dropdown>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !cerda.berraco">Tipo de berraco es requerido.</small>
+                </div>
+         
             </ng-template>
 
             <ng-template pTemplate="footer">

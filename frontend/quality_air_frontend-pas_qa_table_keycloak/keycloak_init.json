@@ -20,6 +20,24 @@
     "user": "no-reply.keycloak25@zohomail.com",
     "password": "Emelecjce123."
   },
+  "users": [
+    {
+      "username": "Hermelinda",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Admin",
+      "lastName": "Hermelinda",
+      "email": "admin@granjaherme.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "1234",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["offline_access", "uma_authorization"]
+    }
+  ],
   "clients": [
     {
       "clientId": "base",
